@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Calculator</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        main{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .calc_base{
+            width: 218px;
+            border: 1px solid rgba(0, 0, 0, 0.603);
+            padding: 5px;
+        }
+        .calc_show{
+            width: 100%;
+            height: 100px;
+            box-shadow: 0 0 10px black;
+            margin-bottom: 10px;
+        }
+        tr>td{
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 0  10px black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="calc_base">    
+            <div class="calc_show">
+                <div class="calc_storage">
+                </div>
+                <div class="inp">
+                </div>
+                <div class="error"></div>
+            </div>
+            <div class="calc_numbs">
+                <table>
+                    <tr>
+                        <td onclick="_clear()">C</td>
+                        <td onclick="_sqr()">x<sup> 2</sup></td>
+                        <td onclick="_backSpace()">&#8676</td>
+                        <td onclick="_exe('/')">/</td>
+                    </tr>
+                    <tr>
+                        <td onclick="_num('7')">7</td>
+                        <td onclick="_num('8')">8</td>
+                        <td onclick="_num('9')">9</td>
+                        <td onclick="_exe('*')">*</td>
+                    </tr>
+                    <tr>
+                        <td onclick="_num('4')">4</td>
+                        <td onclick="_num('5')">5</td>
+                        <td onclick="_num('6')">6</td>
+                        <td onclick="_exe('-')">-</td>
+                    </tr>
+                    <tr>
+                        <td onclick="_num('1')">1</td>
+                        <td onclick="_num('2')">2</td>
+                        <td onclick="_num('3')">3</td>
+                        <td onclick="_exe('+')">+</td>
+                    </tr>
+                    <tr>
+                        <td onclick="_num('00')">00</td>
+                        <td onclick="_num('0')">0</td>
+                        <td onclick="_num('.')">.</td>
+                        <td onclick="_result('=')">=</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script>
+        let _num1= ''
+        let _num2= ''
+        let _res = ''
+        let _action = ''
+        let counter = true
+        let count = 0
+        
+
+        let _inp = document.querySelector('.inp')
+        let _summery = document.querySelector('.calc_storage')
+        let _error = document.querySelector('.error')
+
+        function _num(self){
+            _inp.innerText+= self
+            _getNum()
+        }
+
+        function _getNum(){
+            if(counter){
+                _num1 = Number(_inp.innerText)
+            }else{
+                _num2 = Number(_inp.innerText)
+            }
+        }
+
+        function _exe(self){
+            if(count === 0){
+                if(_num1===''){
+                    _clear()
+                }else{
+                    _action = self
+                    counter = false
+                    count = 1
+                    _summery.innerText+= _num1 + _action
+                }
+                
+            }else if(count === 1 && _res!=='' && _num2=== ''){
+                _action = self
+                counter = false
+                _num1=_res
+                _summery.innerText+= ' '+_action + _num2
+            }
+            _inp.innerText = ''
+            
+        }
+
+        function _result(){
+
+            if(_num1 ==='' || _num2 === ''){
+                _inp.innerText = ''
+                return false
+            }else{
+                switch(_action){
+                    case '+':
+                        _res = (_num1+_num2)
+                    break
+
+                    case '-':
+                        _res = (_num1-_num2)
+                    break
+
+                    case '*':
+                        _res = (_num1*_num2)
+                    break
+
+                    case '/':
+                        _res = (_num1/_num2)
+                    break
+
+            }   
+            }
+            
+            _summery.innerText+= ' ' +_num2+ ' = '+_res
+            _inp.innerText= _res
+            _num2 = ''
+            _num1= _res
+        }
+
+
+        function _sqr(){
+            if(_num1 !== ''){
+                _num1 = _num1 * _num1
+                _inp.innerText= _num1
+            }else{
+                _error.innerText = 'error you have to press C to clear this message'
+                return false
+            }
+        }
+
+        function _clear(){
+            _num1= ''
+            _num2= ''
+            _res= ''
+            _action = ''
+            count=0
+            counter= true
+            _inp.innerText = ''
+            _summery.innerText = ''
+            _error.innerText = ''
+        }
+
+        function _backSpace(){
+            
+            if(_inp.innerText !== ''){
+                _inp.innerText = _inp.innerText.slice(0,-1)
+                _getNum()
+            }else{
+                _inp.innerText = ''
+                return false
+            }
+
+        }
+    </script>
+</body>
+</html>
