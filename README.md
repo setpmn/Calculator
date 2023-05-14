@@ -8,6 +8,6 @@
 
 - Created - 5/10/2023
 
-- Technologies Used - Html , css
+- Technologies Used - Html , css , js
 
 - Role - Frontend
